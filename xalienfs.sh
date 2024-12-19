@@ -19,12 +19,10 @@ env:
   GSHELL_NO_GCC: "1"
 ---
 #!/bin/bash -e
-##############################
-. ${PKGDIR}/AutoToolsRecipe
-##############################
 [[ ! $SWIG_ROOT ]] && SWIG_LIB=`swig -swiglib`
 
-function Configure() {
+rsync -a --delete --exclude='**/.git' --delete-excluded \
+      $SOURCEDIR/ ./
 ./bootstrap.sh
 autoreconf -ivf
 case $ARCHITECTURE in
@@ -50,22 +48,23 @@ export CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/
             --with-perl=perl                     \
             --with-swig-inc="$SWIG_LIB"          \
             --enable-build-server
-}
-
-function MakeInstall() {
+# May not work in multicore
+make
 make install INSTALLSITEARCH=$INSTALLROOT/lib/perl \
              INSTALLARCHLIB=$INSTALLROOT/lib/perl
-}
 
 # Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
-  puts stderr "Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}   \\
