@@ -1,0 +1,8 @@
+[bits]
+  organisation=ALICE
+
+[ALICE]
+  pkg_prefix=VO_ALICE
+  sw_dir=sw
+  repo_dir=alice.bits
+  search_path=bits,general,simulation,hepmc,analysis,ml
