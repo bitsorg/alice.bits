@@ -3,6 +3,6 @@
 
 [ALICE]
   pkg_prefix=VO_ALICE
-  sw_dir=sw
-  repo_dir=alice.bits
+  sw_dir=../sw
+  repo_dir=.
   search_path=bits,general,simulation,hepmc,analysis,ml
