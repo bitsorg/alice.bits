@@ -1,9 +1,12 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-32-06-alice7"
+#tag: "v6-32-18"
+#source: https://github.com/root-project/root.git
+tag: "v6-32-06-alice10"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
+  - abseil
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
@@ -133,12 +136,14 @@ esac
 unset DYLD_LIBRARY_PATH
 CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
+
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
+      -DCMAKE_CXX_FLAGS=" -fpermissive "                                               \
       -Dfreetype=ON                                                                    \
       -Dbuiltin_freetype=OFF                                                           \
       -Dpcre=OFF                                                                       \
@@ -187,11 +192,12 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
       -Dpythia8=ON                                                                     \
-      ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
+       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT;$XSIMD_ROOT;$ABSEIL_ROOT;"
+
 
 # Workaround issue with cmake 3.29.0
 sed -i.removeme '/deps = gcc/d' build.ninja
