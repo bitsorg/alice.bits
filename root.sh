@@ -1,12 +1,9 @@
 package: ROOT
 version: "%(tag_basename)s"
-#tag: "v6-32-18"
-#source: https://github.com/root-project/root.git
-tag: "v6-32-06-alice10"
+tag: "v6-36-04-alice3"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
-  - abseil
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
@@ -65,9 +62,12 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
-[[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
-[[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
-[[ "$CXXFLAGS" == *'-std=c++20'* ]] && CMAKE_CXX_STANDARD=20 || true
+case $CXXFLAGS in
+  *-std=c++14*) CMAKE_CXX_STANDARD=14 ;;
+  *-std=c++17*) CMAKE_CXX_STANDARD=17 ;;
+  *-std=c++20*) CMAKE_CXX_STANDARD=20 ;;
+  *-std=c++23*) CMAKE_CXX_STANDARD=23 ;;
+esac
 
 # We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
@@ -130,20 +130,19 @@ fi
 case $PKG_VERSION in
   v6[-.]30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
   v6[-.]32[-.]0[6789]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON" ;;
+  v6[-.]36[-.][0-9]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON -Dgeombuilder=ON" ;;
   *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
 esac
 
 unset DYLD_LIBRARY_PATH
 CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
-
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
-      -DCMAKE_CXX_FLAGS=" -fpermissive "                                               \
       -Dfreetype=ON                                                                    \
       -Dbuiltin_freetype=OFF                                                           \
       -Dpcre=OFF                                                                       \
@@ -192,12 +191,11 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
       -Dpythia8=ON                                                                     \
-       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
+      ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT;$XSIMD_ROOT;$ABSEIL_ROOT;"
-
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT;$ABSEIL_ROOT"
 
 # Workaround issue with cmake 3.29.0
 sed -i.removeme '/deps = gcc/d' build.ninja
