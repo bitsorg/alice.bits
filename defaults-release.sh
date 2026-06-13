@@ -7,6 +7,8 @@ env:
 disable:
   - RooUnfold
   - treelite
+requires:
+  - alidist.bits  
 overrides:
 
   # Pinpoint AliRoot/AliPhysics
