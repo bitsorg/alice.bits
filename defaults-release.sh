@@ -1,9 +1,7 @@
 package: defaults-release
 version: v1
 
-# CVMFS path templates (this group's structural choice; under system:, so never
-# hashed). Recorded in .meta.json (cvmfs_templates); the publish pipeline
-# resolves {prefix} (group/user root) + {platform}/{pkg}/{tag} per package.
+# CVMFS path templates
 system:
   prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
   cvmfs_user_prefix:          "{prefix}/user"
@@ -15,9 +13,11 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+
 disable:
   - RooUnfold
   - treelite
+
 requires:
   - alidist.bits  
 ---
