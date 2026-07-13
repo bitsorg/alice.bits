@@ -5,7 +5,7 @@ version: v1
 system:
   prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
   cvmfs_user_prefix:          "{prefix}/user"
-  cvmfs_path_template:        "{prefix}/{platform}/Packages/{pkg}/{tag}"
+  cvmfs_releases_template:        "{prefix}/{platform}/Packages/{pkg}/{tag}"
   cvmfs_modules_template:     "{prefix}/{platform}/Modules/modulefiles/{pkg}"
   cvmfs_shared_path_template: "{prefix}/noarch/{pkg}/{tag}"
 
