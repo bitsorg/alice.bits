@@ -3,7 +3,7 @@ version: v1
 
 # CVMFS path templates
 system:
-  prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
+  # CVMFS root prefix is authoritative in bits-console ui-config.yaml (auth boundary).
   cvmfs_user_prefix:          "{prefix}/user"
   cvmfs_releases_template:        "{prefix}/{platform}/Packages/{pkg}/{tag}"
   cvmfs_modules_template:     "{prefix}/{platform}/Modules/modulefiles/{pkg}"
