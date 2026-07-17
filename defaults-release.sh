@@ -3,7 +3,11 @@ version: v1
 
 # CVMFS path templates
 system:
-  # CVMFS root prefix is authoritative in bits-console ui-config.yaml (auth boundary).
+  # {prefix} is the group ROOT (auth boundary). bits-console (ui-config.yaml:
+  # cvmfs_prefix) injects the authoritative value, which WINS; the value below MUST
+  # match it (kept in sync by bits-admin PR) or an injected build refuses to publish.
+  # It lets local `bits build` (no injection) work and is a checked declaration.
+  prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
   cvmfs_user_prefix:          "{prefix}/user"
   cvmfs_releases_template:        "{prefix}/{platform}/Packages/{pkg}/{tag}"
   cvmfs_modules_template:     "{prefix}/{platform}/Modules/modulefiles/{pkg}"
