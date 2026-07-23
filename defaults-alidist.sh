@@ -14,6 +14,14 @@ version: v1
 # alibuild-repo tarballs: that store is unsigned, and bits only reuses content
 # from its own signed store. So an alidist build compiles from source and the
 # results are certified and published into the common repository.
+#
+# valid_defaults_exempt marks this as a structural/overlay layer, not a build
+# flavor: a package's valid_defaults gate (e.g. O2Physics -> [o2, o2-epn, ...])
+# is checked only against flavor defaults, so chaining alidist::<flavor> (which
+# bits expands to release::alidist::<flavor>) does not fail on the alidist or
+# release layers.
+valid_defaults_exempt: true
+
 system:
   legacy_initdotsh: true
 
