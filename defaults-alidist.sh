@@ -4,21 +4,16 @@ version: v1
 # Legacy (aliBuild) build variant. Select with:  bits build --defaults alidist
 # (bits prepends the release base, so this is really release::alidist).
 #
-# It does two things, both so bits reuses the prebuilt alibuild-repo tarballs
-# instead of rebuilding:
-#   * requires the alidist.bits provider, which supplies the alidist recipes AND
-#     declares read_store: <alibuild-repo> — the read-only store those tarballs
-#     live in (bits reads from it and writes freshly-built packages to the
-#     community store).
+# It does two things:
+#   * requires the alidist.bits provider, which supplies the alidist recipes.
 #   * system: legacy_initdotsh: true — keep the pre-modules build-time init.sh,
-#     so package hashes are byte-identical to classic aliBuild and match the
-#     tarballs in that store. Without this, the modules-mode env marker changes
-#     the hash and nothing is reused.
+#     so the build environment matches classic aliBuild.
 #
-# NOTE: for reuse to actually hit, the hashed inputs (env: flags, recipe
-# content, dependency graph) must match how the alibuild-repo tarballs were
-# built. If the release base injects flags that classic aliBuild did not, the
-# hashes diverge and bits rebuilds — expected, not an error.
+# Packages are built from the alidist recipes and published to the community
+# signed store like any other bits build. bits does NOT reuse the public
+# alibuild-repo tarballs: that store is unsigned, and bits only reuses content
+# from its own signed store. So an alidist build compiles from source and the
+# results are certified and published into the common repository.
 system:
   legacy_initdotsh: true
 
