@@ -9,8 +9,14 @@ system:
   # It lets local `bits build` (no injection) work and is a checked declaration.
   prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
   cvmfs_user_prefix:          "{prefix}/user"
-  cvmfs_releases_template:        "{prefix}/{platform}/Packages/{pkg}/{tag}"
-  cvmfs_modules_template:     "{prefix}/{platform}/Modules/modulefiles/{pkg}"
+  # ALICE lays CVMFS out by the OS-first install-dir (el9-x86_64, el9-aarch64,
+  # ubuntu2404_x86_64 — cf. /cvmfs/alice.cern.ch/el*), NOT the arch-first platform
+  # NAME (x86_64-el9). {install_dir} is the platforms-table install_dir (resolved
+  # identically by `bits cvmfs-path` and the publish _expand_tmpl); {platform}
+  # would give x86_64-el9. Decoupled from --architecture (now the aliBuild-native
+  # slc9_x86-64 for recipe compatibility), which never enters the publish path.
+  cvmfs_releases_template:    "{prefix}/{install_dir}/Packages/{pkg}/{tag}"
+  cvmfs_modules_template:     "{prefix}/{install_dir}/Modules/modulefiles/{pkg}"
   cvmfs_shared_path_template: "{prefix}/noarch/{pkg}/{tag}"
 
 env:
