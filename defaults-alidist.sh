@@ -25,6 +25,16 @@ valid_defaults_exempt: true
 system:
   legacy_initdotsh: true
 
+# Export dependency roots on CMAKE_PREFIX_PATH in each build's init.sh (bits
+# knob, read from the hashed env: block so flipping it re-hashes the chain).
+# aliBuild's init.sh sets only <PKG>_ROOT, which CMake ignores for projects
+# whose cmake_minimum_required predates CMP0074/CMP0144 — under CMake 4 (now
+# pinned by alidist) VecGeom's builtin VecCore 0.8.0 (requires 3.9) cannot
+# find Vc without it. The runtime modulefiles already carry CMAKE_PREFIX_PATH
+# (alibuild-generate-module --cmake); this mirrors that at build time.
+env:
+  BITS_LEGACY_CMAKE_PREFIX_PATH: "1"
+
 requires:
   - alidist.bits
 ---
