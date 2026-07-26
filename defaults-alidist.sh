@@ -24,15 +24,19 @@ valid_defaults_exempt: true
 
 system:
   legacy_initdotsh: true
-  # Per-job memory footprint assumed for recipes without mem_per_job (all of
-  # alidist — aliBuild has no such field). bits caps $JOBS at
-  # available*0.9/this, with `available` clamped to the container's cgroup
-  # --memory budget. The bits built-in default of 2 GiB is far too small for
-  # O2/O2Physics C++: a single cc1plus was observed at 4.7 GB RSS, so ~25
-  # parallel jobs blew through the container cap (cgroup OOM-killed cc1plus).
-  # 5 GiB → ~10 jobs on a 57 GB budget, which fits with headroom. Non-hashed
-  # build-host policy: tuning this never rebuilds anything.
-  mem_per_job_default: "5 GiB"
+
+# Heavy C++ packages need a truthful per-job memory footprint: bits caps
+# $JOBS at available*0.9/mem_per_job (with `available` clamped to the
+# container's cgroup --memory budget), and alidist recipes declare no
+# mem_per_job of their own (aliBuild has no such field), so they fall back to
+# the bits 2 GiB default — far too small for O2Physics, where a single
+# cc1plus was observed at 4.7 GB RSS (~25 parallel jobs blew through the
+# container cap; the cgroup OOM-killed the compiler). 5 GiB → ~10 jobs on a
+# 57 GB budget, which fits with headroom. Scoped to O2Physics only: the rest
+# of the chain built fine at the default.
+overrides:
+  O2Physics:
+    mem_per_job: "5 GiB"
 
 # Export dependency roots on CMAKE_PREFIX_PATH in each build's init.sh (bits
 # knob, read from the hashed env: block so flipping it re-hashes the chain).
