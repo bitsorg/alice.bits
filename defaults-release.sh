@@ -7,7 +7,7 @@ system:
   # cvmfs_prefix) injects the authoritative value, which WINS; the value below MUST
   # match it (kept in sync by bits-admin PR) or an injected build refuses to publish.
   # It lets local `bits build` (no injection) work and is a checked declaration.
-  prefix:                     "/cvmfs/sft-nightlies-test.cern.ch/bits/alice"
+  prefix:                     "/cvmfs/bits.cern.ch/alice"
   cvmfs_user_prefix:          "{prefix}/user"
   # ALICE lays CVMFS out by the OS-first install-dir (el9-x86_64, el9-aarch64,
   # ubuntu2404_x86_64 — cf. /cvmfs/alice.cern.ch/el*), NOT the arch-first platform
