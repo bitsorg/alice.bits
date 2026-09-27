@@ -8,15 +8,10 @@ version: v1
 # flavor
 valid_defaults_exempt: true
 
-variables:
-  release: "master"
-
 system:
   legacy_initdotsh: true
 
 overrides:
-  alidist.bits:
-    tag: "%(release)s"
   O2Physics:
     mem_per_job: "5 GiB"
 
