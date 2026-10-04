@@ -1,14 +1,16 @@
 package: defaults-alidist
 version: v1
 
-# Legacy (aliBuild) build variant. Select with:  bits build --defaults alidist
-# (bits prepends the release base, so this is really release::alidist).
+# ALICE on bits: build with  bits build --defaults alidist::<flavour> PKG  (e.g. alidist::o2).
+# bits prepends the release base (defaults-release.sh here: CVMFS layout only), so
+# the chain is release::alidist::o2. This variant adds the bits knobs that keep
+# builds aliBuild-compatible; everything else comes from the alidist flavour.
 
-# valid_defaults_exempt marks this as a structural/overlay layer, not a build
-# flavor
+# A structural overlay, not a build flavour: packages' valid_defaults ignore it.
 valid_defaults_exempt: true
 
 system:
+  # aliBuild-compatible build-time init.sh, so alidist tarballs stay reusable.
   legacy_initdotsh: true
 
 overrides:

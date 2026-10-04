@@ -65,7 +65,7 @@ container build, record instead, e.g. on an EL9 x86-64 host:
 `bits use build -c alice.bits --defaults alidist::o2 --architecture slc9_x86-64 --docker --docker-image registry.cern.ch/alisw/slc9-builder`.
 To build elsewhere, `export BITS_WORK_DIR=/path/to/sw`.
 
-`--defaults alidist::o2` loads `release` (this repository), the `alidist` variant (this
+`--defaults alidist::o2` loads `release` and the `alidist` variant (both from this
 repository) and alidist's `o2` defaults. `O2` builds the same way. Pick another alidist
 flavour by replacing `o2`, e.g. `alidist::o2-epn`; packages reject flavours they do not
 list in their `valid_defaults`.
@@ -106,14 +106,17 @@ same package hashes and can share tarballs.
   which builds with `--defaults alidist::<flavour>` on the platforms above. To check where a
   package would land, use
   [`bits cvmfs-path`](https://github.com/bitsorg/bits/blob/main/docs/REFERENCE.md#bits-cvmfs-path).
-- **Changing defaults.** `defaults-release.sh` here replaces alidist's file of the same name;
-  keep the two in step when alidist changes its base flags.
+- **Changing defaults.** Compiler flags, disabled packages and version pins come from
+  the alidist flavour (`defaults-o2.sh`, ...); change them in alidist. This repository
+  holds only the CVMFS layout and the bits-specific build settings. Its
+  `defaults-release.sh` must stay: it hides alidist's file of the same name, the legacy
+  ROOT 5 flavour, which aliBuild never loads under `--defaults o2`.
 
 ## Files
 
 | File | Role |
 |---|---|
-| `defaults-release.sh` | Base defaults: compiler flags and disabled packages taken over from alidist, the ALICE CVMFS layout, and `requires: alidist.bits`, so every build pulls in alidist. |
+| `defaults-release.sh` | Base of every chain: the ALICE CVMFS layout and `requires: alidist.bits`, so every build pulls in alidist. Nothing else; it replaces alidist's legacy `defaults-release.sh`. |
 | `defaults-alidist.sh` | The aliBuild-compatible build variant: legacy build-time `init.sh` (alidist-compatible hashes), `CMAKE_PREFIX_PATH` exported at build time, and 5 GiB of memory per compile job for O2Physics. |
 | `grpc.sh`, `vecgeom.sh` | Temporary copies of the alidist recipes with a build fix each. Because this repository is searched before alidist, they shadow the alidist versions; they will be removed once the fixes are merged upstream. |
 
