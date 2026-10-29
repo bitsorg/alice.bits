@@ -28,6 +28,12 @@ in the bits reference):
 - bits installed as described in the
   [bits README](https://github.com/bitsorg/bits#installation); this also puts the `aliBuild`
   wrapper on your `PATH`. Check the machine with `bits doctor`.
+- For a container build (`--docker` with the builder image below), docker or rootless
+  podman; for a build on this machine, the system packages listed in
+  [Building natively](https://github.com/bitsorg/bits/blob/main/docs/USERGUIDE.md#building-natively-what-to-install). See
+  [Installation & Prerequisites](https://github.com/bitsorg/bits/blob/main/docs/USERGUIDE.md#2-installation--prerequisites) in the bits user
+  guide, and its [Platforms](https://github.com/bitsorg/bits/blob/main/docs/USERGUIDE.md#platforms) for how ALICE's platform names differ from
+  the other communities'.
 - A platform alidist supports. The bits-console ALICE builds use these architectures and
   builder images:
 
