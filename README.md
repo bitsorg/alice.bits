@@ -107,7 +107,8 @@ same package hashes and can share tarballs.
   install directory follows the OS-first ALICE convention (`el9-x86_64`, `el9-aarch64`,
   `ubuntu2404_x86_64`), not the architecture string. The prefix
   `/cvmfs/bits.cern.ch/alice` must match the `cvmfs_prefix` that bits-console sets for ALICE;
-  a build whose prefix disagrees refuses to publish.
+  a build whose prefix disagrees refuses to publish. The layout is in `cvmfs.yaml`. Each
+  package is published once: a rebuild skips the packages that are already there.
 - **Publishing** is done from [bits-console](https://gitlab.cern.ch/buncic/bits-console),
   which builds with `--defaults alidist::<flavour>` on the platforms above. To check where a
   package would land, use
@@ -122,7 +123,8 @@ same package hashes and can share tarballs.
 
 | File | Role |
 |---|---|
-| `defaults-release.sh` | Base of every chain: the ALICE CVMFS layout and `requires: alidist.bits`, so every build pulls in alidist. Nothing else; it replaces alidist's legacy `defaults-release.sh`. |
+| `cvmfs.yaml` | The ALICE CVMFS layout: the prefix and where packages and modulefiles go. |
+| `defaults-release.sh` | Base of every chain: `requires: alidist.bits`, so every build pulls in alidist. Nothing else; it replaces alidist's legacy `defaults-release.sh`. |
 | `defaults-alidist.sh` | The aliBuild-compatible build variant: legacy build-time `init.sh` (alidist-compatible hashes), `CMAKE_PREFIX_PATH` exported at build time, and 5 GiB of memory per compile job for O2Physics. |
 | `grpc.sh`, `vecgeom.sh` | Temporary copies of the alidist recipes with a build fix each. Because this repository is searched before alidist, they shadow the alidist versions; they will be removed once the fixes are merged upstream. |
 

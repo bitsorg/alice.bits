@@ -1,0 +1,18 @@
+# CVMFS layout of this recipe repository: the keys of a defaults profile's
+# system: section, read with the first profile taken from this repository
+# (a later profile, e.g. a nightly one, can still change a key). See bits'
+# docs/REFERENCE.md, "The CVMFS layout file: cvmfs.yaml".
+#
+# {prefix} is the group root (auth boundary). bits-console (ui-config.yaml:
+# cvmfs_prefix) injects the authoritative value, which wins; the value below
+# must match it or an injected build refuses to publish.
+prefix:                     "/cvmfs/bits.cern.ch/alice"
+cvmfs_user_prefix:          "{prefix}/user"
+# ALICE lays CVMFS out by the OS-first install dir (el9-x86_64, ubuntu2404_x86_64,
+# as in /cvmfs/alice.cern.ch), not the platform name; {install_dir} comes from
+# the platforms table, independent of the aliBuild-style --architecture.
+# Each package is published once, at its own path: a rebuild skips what is there.
+cvmfs_packages_template:    "{prefix}/{install_dir}/Packages/{pkg}/{tag}"
+cvmfs_releases_template:    "{prefix}/{install_dir}/Packages/{pkg}/{tag}"
+cvmfs_modules_template:     "{prefix}/{install_dir}/Modules/modulefiles/{pkg}"
+cvmfs_shared_path_template: "{prefix}/noarch/{pkg}/{tag}"
