@@ -126,7 +126,7 @@ same package hashes and can share tarballs.
 | `cvmfs.yaml` | The ALICE CVMFS layout: the prefix and where packages and modulefiles go. |
 | `defaults-release.sh` | Base of every chain: `requires: alidist.bits`, so every build pulls in alidist. Nothing else; it replaces alidist's legacy `defaults-release.sh`. |
 | `defaults-alidist.sh` | The aliBuild-compatible build variant: legacy build-time `init.sh` (alidist-compatible hashes), `CMAKE_PREFIX_PATH` exported at build time, and 5 GiB of memory per compile job for O2Physics. |
-| `grpc.sh`, `vecgeom.sh` | Temporary copies of the alidist recipes with a build fix each. Because this repository is searched before alidist, they shadow the alidist versions; they will be removed once the fixes are merged upstream. |
+| `packages/grpc.sh`, `packages/vecgeom.sh` | Temporary copies of the alidist recipes with a build fix each. Because this repository is searched before alidist, they shadow the alidist versions; they will be removed once the fixes are merged upstream. |
 
 ## More information
 
